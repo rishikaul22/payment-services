@@ -12,7 +12,7 @@ public class AcquirerServer {
         AcquirerProcessInterface stub = (AcquirerProcessInterface) UnicastRemoteObject.exportObject(transactionProcessImpl, 0);
         Registry registry = LocateRegistry.createRegistry(2000);
         registry.bind("acquirer",stub);
-        System.getProperties().put("java.rmi.server.logCalls","true");
+//        System.getProperties().put("java.rmi.server.logCalls","true");
         System.out.println("AcquirerServer Started");
 
     }
