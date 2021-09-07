@@ -1,0 +1,5 @@
+com/client/MerchantClient.class
+com/server/TransactionServer.class
+com/rmi/TransactionProcessInterface.class
+com/rmi/TransactionProcessImpl.class
+com/model/Transaction.class
