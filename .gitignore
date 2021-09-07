@@ -1,2 +1,4 @@
 .idea/
+
+# macOS files
 .DS_Store
