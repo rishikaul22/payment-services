@@ -12,7 +12,8 @@ public class MerchantClient{
         Thread.sleep(5000);
         Scanner sc = new Scanner(System.in);
         Registry registry = LocateRegistry.getRegistry(2000);
-        AcquirerProcessInterface acquirertransaction = (AcquirerProcessInterface)registry.lookup("acquirer");
+        // add load balancer here
+        AcquirerProcessInterface acquirertransaction = (AcquirerProcessInterface)registry.lookup("acquirer1");
         AcquirerTransaction firstAcquirerTransaction = new AcquirerTransaction();
         int choice = 1;
         while(choice != -1) {
