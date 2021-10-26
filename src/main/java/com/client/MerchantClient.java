@@ -1,5 +1,8 @@
 package com.client;
 
+import com.Utils;
+import com.acquirer.balancer.LoadBalancerImpl;
+import com.acquirer.balancer.LoadBalancerInterface;
 import com.model.AcquirerTransaction;
 import com.acquirer.rmi.AcquirerProcessInterface;
 
@@ -13,23 +16,25 @@ public class MerchantClient{
         Scanner sc = new Scanner(System.in);
         Registry registry = LocateRegistry.getRegistry(2000);
         // add load balancer here
-        AcquirerProcessInterface acquirertransaction = (AcquirerProcessInterface)registry.lookup("acquirer1");
+        LoadBalancerInterface loadBalancerInterface = (LoadBalancerInterface)registry.lookup("balancer");
         AcquirerTransaction firstAcquirerTransaction = new AcquirerTransaction();
+
         int choice = 1;
         while(choice != -1) {
-            System.out.println("Enter\n\t 1 for preset params\n\t 2 for custom params\n\t 3 for custom amount\n\t-1 to exit");
+            firstAcquirerTransaction.setId(Utils.generateTransactionID(5));
+            System.out.println("Enter\n\t 1 for preset params\n\t 2 for custom params\n\t 3 for custom amount\n\t 4 for 50 transactions\n\t-1 to exit");
             choice = sc.nextInt();
             if (choice == 1) {
-                firstAcquirerTransaction.setId("1");
-                firstAcquirerTransaction.setAmount(1001);
-                firstAcquirerTransaction.setCustomerCardNumber("000000000");
-                firstAcquirerTransaction.setMerchantName("Amazon");
-                firstAcquirerTransaction.setMerchantAccountId("1234");
-                firstAcquirerTransaction.setCustomerName("Rishi");
+
+                firstAcquirerTransaction.setAmount(1000);
+                String [] merchant = Utils.getMerchantDetails();
+                firstAcquirerTransaction.setMerchantName(merchant[1]);
+                firstAcquirerTransaction.setMerchantAccountId(merchant[0]);
+                String [] customer = Utils.generateCustomerDetails();
+                firstAcquirerTransaction.setCustomerCardNumber(customer[0]);
+                firstAcquirerTransaction.setCustomerName(customer[1]);
             } else if (choice == 2) {
-                System.out.println("Enter Id");
-                String temp = sc.next();
-                firstAcquirerTransaction.setId(temp);
+                String temp;
                 System.out.println("Enter amount");
                 int amt = sc.nextInt();
                 firstAcquirerTransaction.setAmount(amt);
@@ -48,17 +53,33 @@ public class MerchantClient{
                 firstAcquirerTransaction.setCustomerName(temp);
             }
             if (choice == 3) {
-                firstAcquirerTransaction.setId("1");
                 System.out.println("Enter amount");
                 int amt = sc.nextInt();
                 firstAcquirerTransaction.setAmount(amt);
-                firstAcquirerTransaction.setCustomerCardNumber("000000000");
-                firstAcquirerTransaction.setMerchantName("Amazon");
-                firstAcquirerTransaction.setMerchantAccountId("1234");
-                firstAcquirerTransaction.setCustomerName("Rishi");
+                String [] customer = Utils.generateCustomerDetails();
+                firstAcquirerTransaction.setCustomerCardNumber(customer[0]);
+                firstAcquirerTransaction.setCustomerName(customer[1]);
+                String [] merchant = Utils.getMerchantDetails();
+                firstAcquirerTransaction.setMerchantName(merchant[1]);
+                firstAcquirerTransaction.setMerchantAccountId(merchant[0]);
+
+            }
+            if(choice == 4) {
+                for(int i = 0; i < 50; i++) {
+                    firstAcquirerTransaction.setId(Utils.generateTransactionID(5));
+                    firstAcquirerTransaction.setAmount(1000);
+                    String [] merchant = Utils.getMerchantDetails();
+                    firstAcquirerTransaction.setMerchantName(merchant[1]);
+                    firstAcquirerTransaction.setMerchantAccountId(merchant[0]);
+                    String [] customer = Utils.generateCustomerDetails();
+                    firstAcquirerTransaction.setCustomerCardNumber(customer[0]);
+                    firstAcquirerTransaction.setCustomerName(customer[1]);
+                    loadBalancerInterface.processTransaction(firstAcquirerTransaction);
+                }
             }
 
-            System.out.println("Response Body: " + acquirertransaction.processMerchantTransaction(firstAcquirerTransaction));
+//            System.out.println("Response Body: " + acquirertransaction.processMerchantTransaction(firstAcquirerTransaction));
+            System.out.println("Response Body: " + loadBalancerInterface.processTransaction(firstAcquirerTransaction));
         }
     }
 }
