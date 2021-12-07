@@ -1,4 +1,10 @@
 # Payment-Services
+A distributed architecture for merchant payment services, incorporating core distributed computing concepts, such as client-server communication, load balancing, clock synchronisation etc.
+
+**System Diagram**
+<img width="690" alt="Screenshot 2021-12-07 at 9 58 03 PM" src="https://user-images.githubusercontent.com/54001108/145067794-c8085223-1a81-4419-ae7d-4065f3df7c79.png">
+
+
 Steps to run the project:
 1. Open the folder in a JAVA based IDE (IntelliJ/Eclipse)
 2. Use Maven's lifecycle method 'package' to install the required packages for this project
