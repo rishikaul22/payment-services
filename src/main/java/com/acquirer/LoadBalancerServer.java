@@ -16,5 +16,6 @@ public class LoadBalancerServer {
         System.out.println("Registry Created at Port 2000");
         registry.bind("balancer",balancerStub);
         System.out.println("Load balancer started");
+        System.out.println("Leader : Acquirer 1");
     }
 }

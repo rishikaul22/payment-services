@@ -6,8 +6,11 @@ import com.acquirer.balancer.LoadBalancerInterface;
 import com.model.AcquirerTransaction;
 import com.acquirer.rmi.AcquirerProcessInterface;
 
+import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class MerchantClient{
@@ -15,8 +18,9 @@ public class MerchantClient{
         Thread.sleep(5000);
         Scanner sc = new Scanner(System.in);
         Registry registry = LocateRegistry.getRegistry(2000);
+
         // add load balancer here
-        LoadBalancerInterface loadBalancerInterface = (LoadBalancerInterface)registry.lookup("balancer");
+        LoadBalancerInterface loadBalancerInterface = (LoadBalancerInterface) registry.lookup("balancer");
         AcquirerTransaction firstAcquirerTransaction = new AcquirerTransaction();
 
         int choice = 1;
@@ -78,8 +82,20 @@ public class MerchantClient{
                 }
             }
 
-//            System.out.println("Response Body: " + acquirertransaction.processMerchantTransaction(firstAcquirerTransaction));
-            System.out.println("Response Body: " + loadBalancerInterface.processTransaction(firstAcquirerTransaction));
+            try {
+                Map<String, String> returnValue = loadBalancerInterface.processTransaction(firstAcquirerTransaction);
+                if(returnValue == null){
+                    System.out.println("Sorry, no servers available. :(");
+                } else {
+                    System.out.println("Response Body: " + returnValue);
+                }
+            }
+            catch (NotBoundException e){
+                System.out.println("");
+            } catch (Exception e){
+                System.out.println(e);
+                System.out.println("Sorry, no servers available. :(");
+            }
         }
     }
 }

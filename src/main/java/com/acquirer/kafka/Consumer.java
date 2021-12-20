@@ -47,7 +47,7 @@ public class Consumer {
 
                 try {
                     Connection conn = DriverManager.getConnection(
-                            "jdbc:mysql://127.0.0.1:3306/payment", "root", "root");
+                            "jdbc:mysql://127.0.0.1:3306/PaymentService", "root", "Khushi");
                     PreparedStatement preparedStatement = conn.prepareStatement(SQL_SELECT);
                     preparedStatement.setString(1, record.value().getId());
                     preparedStatement.setString(2, record.value().getCustomerName());
@@ -57,7 +57,7 @@ public class Consumer {
                     preparedStatement.setLong(6, record.value().getAmount());
                     int rows = preparedStatement.executeUpdate();
 
-                    conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3307/payment", "root", "root");
+                    conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3307/PaymentService", "root", "Khushi");
                     preparedStatement = conn.prepareStatement(SQL_SELECT);
                     preparedStatement.setString(1, record.value().getId());
                     preparedStatement.setString(2, record.value().getCustomerName());
@@ -66,7 +66,8 @@ public class Consumer {
                     preparedStatement.setString(5, record.value().getMerchantAccountId());
                     preparedStatement.setLong(6, record.value().getAmount());
                     rows = preparedStatement.executeUpdate();
-//                    System.out.println(rows);
+
+
 
                 } catch (SQLException e) {
                     System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());

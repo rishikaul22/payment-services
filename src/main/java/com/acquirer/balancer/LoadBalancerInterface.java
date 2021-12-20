@@ -8,4 +8,5 @@ import java.util.Map;
 
 public interface LoadBalancerInterface extends Remote {
     public Map<String, String> processTransaction(AcquirerTransaction firstAcquirerTransaction) throws Exception;
+
 }
